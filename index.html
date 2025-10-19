@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artroscopia</title>
+  <style>
+    body {background:#101522;color:#fff;font-family:system-ui, sans-serif;margin:0;padding:0;}
+    header {background:#1a1f33;padding:12px 16px;position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(255,255,255,0.1);}
+    h1 {margin:0;font-size:1.2rem;}
+    .grid {display:grid;gap:12px;padding:16px;}
+    @media(min-width:480px){.grid{grid-template-columns:repeat(2,1fr);}}
+    @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr);}}
+    .card {background:#181f3a;border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;}
+    .card img,.card video {width:100%;height:200px;object-fit:cover;display:block;}
+    .card .title {padding:8px 12px;font-size:0.9rem;color:#ddd;}
+    .viewer {position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;flex-direction:column;}
+    .viewer.show {display:flex;}
+    .viewer video,.viewer img {max-width:90vw;max-height:80vh;border-radius:10px;}
+    .close {position:absolute;top:10px;right:10px;background:#000;color:#fff;border:none;font-size:22px;width:40px;height:40px;border-radius:50%;cursor:pointer;}
+    .caption {margin-top:8px;color:#ccc;font-size:0.95rem;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CXDoctorSalgadoArtroscopiaDeRodilla19102025</h1>
+  </header>
+  <main>
+    <div class="grid" id="gallery"></div>
+  </main>
+
+  <div class="viewer" id="viewer">
+    <button class="close" id="closeBtn">✕</button>
+    <div id="viewerContent"></div>
+    <div class="caption" id="caption"></div>
+  </div>
+
+  <script>
+    const mediaItems = [
+      { type: 'image', src: 'media/Foto1.jpeg', title: 'Foto 1' },
+      { type: 'image', src: 'media/Foto2.jpeg', title: 'Foto 2' },
+      { type: 'image', src: 'media/Foto3.jpeg', title: 'Foto 3' },
+      { type: 'image', src: 'media/Foto4.jpeg', title: 'Foto 4' },
+      { type: 'image', src: 'media/Foto5.jpeg', title: 'Foto 5' },
+      { type: 'image', src: 'media/Foto6.jpeg', title: 'Foto 6' },
+      { type: 'image', src: 'media/Foto7.jpeg', title: 'Foto 7' },
+      { type: 'video', src: 'media/Video1.mp4', title: 'Video 1' },
+      { type: 'video', src: 'media/Video2.mp4', title: 'Video 2' },
+      { type: 'video', src: 'media/Video3.mp4', title: 'Video 3' },
+      { type: 'video', src: 'media/Video4.mp4', title: 'Video 4' },
+      { type: 'video', src: 'media/Video5.mp4', title: 'Video 5' }
+    ];
+
+    const gallery = document.getElementById('gallery');
+
+    mediaItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      if(item.type === 'image') {
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.title;
+        card.appendChild(img);
+      } else {
+        const vid = document.createElement('video');
+        vid.src = item.src;
+        vid.muted = true;
+        vid.preload = 'metadata';
+        card.appendChild(vid);
+      }
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = item.title;
+      card.appendChild(title);
+
+      card.addEventListener('click', () => openViewer(item));
+      gallery.appendChild(card);
+    });
+
+    const viewer = document.getElementById('viewer');
+    const viewerContent = document.getElementById('viewerContent');
+    const caption = document.getElementById('caption');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function openViewer(item){
+      viewerContent.innerHTML = '';
+      caption.textContent = item.title;
+      if(item.type === 'image') {
+        const img = document.createElement('img');
+        img.src = item.src;
+        viewerContent.appendChild(img);
+      } else {
+        const vid = document.createElement('video');
+        vid.src = item.src;
+        vid.controls = true;
+        vid.autoplay = true;
+        vid.playsInline = true;
+        viewerContent.appendChild(vid);
+      }
+      viewer.classList.add('show');
+    }
+
+    closeBtn.addEventListener('click', ()=>{
+      const vid = viewerContent.querySelector('video');
+      if(vid) vid.pause();
+      viewer.classList.remove('show');
+      viewerContent.innerHTML = '';
+    });
+    viewer.addEventListener('click',(e)=>{ if(e.target===viewer) viewer.classList.remove('show'); });
+  </script>
+</body>
+</html>
